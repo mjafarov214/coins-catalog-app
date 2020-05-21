@@ -1,0 +1,81 @@
+.coin-form{
+    width: 100%;
+    margin-top:25px;
+    margin-bottom: 62px;
+}
+
+.coin-form table{
+    width: 100%;
+}
+
+.form-description{
+    height: 100%;
+    margin:0
+}
+.form-number{
+    width: 100%;
+    margin-left: 0px;
+}
+
+.form-button{
+    width: 120px;
+    height: 48px;
+    margin: 0 15px;
+    margin-top: 25px;
+}
+
+.form-modal-icon{
+    color: rgb(168, 168, 19);
+    margin-right: 15px;
+}
+
+.stretchLeft{
+    animation-name: stretchLeft;
+    -webkit-animation-name: stretchLeft;    
+ 
+    animation-duration: 1s; 
+    -webkit-animation-duration: 1s;
+ 
+    animation-timing-function: ease-out;    
+    -webkit-animation-timing-function: ease-out;    
+ 
+    transform-origin: 100% 0%;
+    -ms-transform-origin: 100% 0%;
+    -webkit-transform-origin: 100% 0%; 
+}
+ 
+@keyframes stretchLeft {
+    0% {
+        transform: scaleX(0.3);
+    }
+    80% {
+        transform: scaleX(1.01);
+    }
+    100% {
+        transform: scaleX(0.98);
+    }               
+    80% {
+        transform: scaleX(1.01);
+    }
+    100% {
+        transform: scaleX(1);
+    }                           
+}
+ 
+@-webkit-keyframes stretchLeft {
+    0% {
+        -webkit-transform: scaleX(0.3);
+    }
+    80% {
+        -webkit-transform: scaleX(1.01);
+    }
+    100% {
+        -webkit-transform: scaleX(0.98);
+    }               
+    80% {
+        -webkit-transform: scaleX(1.01);
+    }
+    100% {
+        -webkit-transform: scaleX(1);
+    }       
+}

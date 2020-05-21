@@ -1,0 +1,77 @@
+.coin-filter{
+    width:41%;
+    min-width:524px;
+}
+
+.coin-filter p{
+    font-weight: 500;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 15px;
+    color: #000000;
+    margin-top:25px;
+    margin-bottom: 5px;
+}
+
+.search-area{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.search-input{
+    width: 71.37%;
+    height: 48px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 24%;
+    padding: 16px;
+    color: #000000;
+    border-color: #000000;
+}
+
+.search-button{
+    width: 120px;
+    height: 48px;
+}
+
+#adv-filter-button{
+    font-weight: 300;  
+}
+
+.filter-icon{
+    margin-left: 7px;
+}
+
+.up-filter-icon{
+    position: absolute;
+    left: 0px;
+    top:5px
+}
+.filter-icon-area{
+    position: relative;
+}
+
+.advanced-ind{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.filter-link-to-admin{
+    position: absolute;
+    right: 52px;
+    top: 52px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 22px;
+    text-decoration-line: underline;
+    color: #000000;
+}
+
+.filter-link-to-admin:hover{
+    text-decoration-line: underline;
+}

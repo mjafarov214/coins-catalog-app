@@ -1,0 +1,65 @@
+.ant-form{
+    width:55%;
+    min-width: 698px;
+}
+
+.ant-form-item-label{
+    font-weight: 500;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 15px;
+    color: #000000;
+}
+
+.ant-input-number{
+    border-color: #000000;
+    margin: 0 10px;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+    border-color: #000000;
+}
+
+
+.fadeIn{
+    animation-name: fadeIn;
+    -webkit-animation-name: fadeIn; 
+ 
+    animation-duration: 1s; 
+    -webkit-animation-duration: 1s;
+ 
+    animation-timing-function: ease-in-out; 
+    -webkit-animation-timing-function: ease-in-out;     
+ 
+    visibility: visible !important; 
+}
+ 
+@keyframes fadeIn {
+    0% {
+        transform: scale(0);
+        opacity: 0.0;       
+    }
+    80% {
+        transform: scale(0.9);
+        opacity: 1; 
+    }   
+    100% {
+        transform: scale(1);
+        opacity: 1; 
+    }       
+}
+ 
+@-webkit-keyframes fadeIn {
+    0% {
+        -webkit-transform: scale(0);
+        opacity: 0.0;       
+    }
+    80% {
+        -webkit-transform: scale(0.9);
+        opacity: 1; 
+    }   
+    100% {
+        -webkit-transform: scale(1);
+        opacity: 1; 
+    }       
+}

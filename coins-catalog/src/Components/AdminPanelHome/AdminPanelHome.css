@@ -1,0 +1,128 @@
+.admin-filter{
+    width:41%;
+    min-width:524px;
+    margin-bottom: 15px;
+}
+
+.admin-filter p{
+    font-weight: 500;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 15px;
+    color: #000000;
+    margin-top:25px;
+    margin-bottom: 5px;
+}
+
+
+
+.admin-link-to-add-area{
+    width: 20%;
+    min-width: 20%;
+    margin-top:25px;
+    display: flex;
+    flex-direction: row;
+}
+
+.admin-link-to-add{
+    border: 1px solid black;
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    text-align: center;
+    line-height: 120px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.admin-link-to-add-p{
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 15px;
+    text-decoration-line: underline;    
+    color: #000000;
+    margin-left: 15%;
+    margin-top: 50px;
+}
+
+.admin-home-item{
+    display: flex;
+    flex-direction: row;
+}
+
+.admin-home-button{
+    width: 120px;
+    height: 48px;
+    margin: 0 15px;
+    margin-top: 25px;
+    background-color: #E5E5E5;
+}
+
+.admin-home-button-area{
+    margin-left: -12.5%;
+}
+
+.admin-pagination{
+    width: 35%;
+    min-width: 250px ;
+    margin:25px auto 62px;
+}
+
+.admin-modal-icon svg{
+    color: tomato;
+    margin-right: 15px;
+}
+
+
+.stretchRight{
+    animation-name: stretchRight;
+    -webkit-animation-name: stretchRight;   
+ 
+    animation-duration: 1s;   
+    -webkit-animation-duration: 1s;
+ 
+    animation-timing-function: ease-out;    
+    -webkit-animation-timing-function: ease-out;    
+ 
+    transform-origin: 0% 0%;
+    -ms-transform-origin: 0% 0%;
+    -webkit-transform-origin: 0% 0%;        
+}
+ 
+@keyframes stretchRight {
+    0% {
+        transform: scaleX(0.3);
+    }
+    80% {
+        transform: scaleX(1.01);
+    }
+    100% {
+        transform: scaleX(0.98);
+    }               
+    80% {
+        transform: scaleX(1.01);
+    }
+    100% {
+        transform: scaleX(1);
+    }                           
+}
+ 
+@-webkit-keyframes stretchRight {
+    0% {
+        -webkit-transform: scaleX(0.3);
+    }
+    80% {
+        -webkit-transform: scaleX(1.01);
+    }
+    100% {
+        -webkit-transform: scaleX(0.98);
+    }               
+    80% {
+        -webkit-transform: scaleX(1.01);
+    }
+    100% {
+        -webkit-transform: scaleX(1);
+    }       
+}

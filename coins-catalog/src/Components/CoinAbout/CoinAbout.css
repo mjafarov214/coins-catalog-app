@@ -1,0 +1,85 @@
+.coin-about{
+    width: 60%;
+    min-width: 782px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+.coin-about h2{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 33px;
+}
+
+.coin-about p{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.coin-about-img img{
+    width: 300px;
+    height: 300px;
+}
+
+.coin-about-img {
+    position: relative;
+    height: 300px;
+}
+
+.coin-about-img:hover .coin-about-img-rever{
+    opacity: 1;
+    visibility: visible;
+}
+
+.coin-about-img-rever{
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 1s opacity, 1s visibility;
+}
+
+.coin-about-info{
+    margin-top: 20px;
+    min-width: 452px;
+    width: 58%;
+    padding: 19px 43px;
+    background-color: rgba(196, 196, 196, 0.5);
+}
+
+.coin-about-table{
+    width: 81%;
+    min-width: 366px;
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+
+.coin-about-table tr:nth-child(odd){
+    background-color: white;   
+}
+
+.coin-about-table td:nth-child(odd){
+    border-right:1px solid rgba(196, 196, 196, 0.5) ;   
+}
+
+.coin-about-table td{
+    padding: 0 10px;   
+}
+
+.about-back{
+    cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+}
+
+.about-back:hover{
+    color: steelblue;
+}

@@ -1,0 +1,11 @@
+.coins-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    margin-bottom: 62px;
+}
+
+.empty{
+    margin:25px auto;
+}
