@@ -68,6 +68,7 @@ class CoinsList extends React.Component{
         })
         .then(res => res.json())
         .then((data) => {
+            // console.log(data);
             const seacrhKeys = Object.keys(this.state.searchProps)
             let newArray = data
     
@@ -95,12 +96,17 @@ class CoinsList extends React.Component{
                     })
                 }
             }
-    
+        
             this.setState({
                 filteredData: newArray,
                 lastPage: +Math.ceil(newArray.length / this.state.pageSize)
-            })  
-        });
+            });
+        }).catch(()=>{
+            this.setState({
+                filteredData: [],
+                lastPage: 0
+            });
+        }) 
 
     }
 

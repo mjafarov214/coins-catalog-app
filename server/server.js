@@ -32,16 +32,29 @@ function checkCredentials(req) {
     //console.log(users);
     const user = users.find(u => u.login === userLogin);
     if (!user) {
-      return false;
+        return false;
     }
     const salt = user.salt;
     const hash = bcrypt.hashSync(userPass, salt);
     if (user.hash === hash) {
-      return true;
+        return true;
     } else {
-      return false;
+        return false;
     }
-  }
+}
+
+function checkToken(req) {
+    const userToken = req.body.token;
+    if(!userToken) {
+        return false;
+    }
+    const ourToken = tokens.find(t => t.token === userToken);
+    if(!ourToken) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 app.post('/register', (req, res) => {
     const salt = bcrypt.genSaltSync(9);
@@ -68,6 +81,16 @@ app.post('/token', (req, res) => {
           res.json({ login: login, token: newToken });
     }
   });
+
+
+app.post('/logout', (req, res) => {
+    if (!checkToken(req)) {
+        res.sendStatus(401);
+    } else {
+        tokens = tokens.filter((el)=>{ return el.token !== req.body.token})
+        res.sendStatus(200);
+    }
+});
 
 
 app.get('/coins', (req, res) => {
@@ -165,53 +188,64 @@ app.get('/coin/:ID', (req, res) => {
 });
 
 app.post('/coin/add',(req,res)=>{
-    const sql = `INSERT INTO coins
-    (country , face_value , image_src , image_src_rever , name
-        , metal , firstPar , price , quality , secondPar , typeCoin , weight , year)VALUES
-    ('${req.body.country}', '${req.body.face_value}', '${req.body.image_src}', '${req.body.image_src_rever}'
-    , '${req.body.name}', '${req.body.metal}', '${req.body.firstPar}', ${req.body.price}
-    , '${req.body.quality}', '${req.body.secondPar}', '${req.body.typeCoin}', ${req.body.weight}
-    , ${req.body.year})`
-    pool.query(sql, (err, data) => {
-        if (!err) {
-            res.status(200);
-            res.json(data);
-        } else {
-            res.status(500);
-        }
-    });
+    if (!checkToken(req)) {
+        res.sendStatus(401);
+      }else{
+        const sql = `INSERT INTO coins
+        (country , face_value , image_src , image_src_rever , name
+            , metal , firstPar , price , quality , secondPar , typeCoin , weight , year)VALUES
+        ('${req.body.country}', '${req.body.face_value}', '${req.body.image_src}', '${req.body.image_src_rever}'
+        , '${req.body.name}', '${req.body.metal}', '${req.body.firstPar}', ${req.body.price}
+        , '${req.body.quality}', '${req.body.secondPar}', '${req.body.typeCoin}', ${req.body.weight}
+        , ${req.body.year})`
+        pool.query(sql, (err, data) => {
+            if (!err) {
+                res.status(200);
+                res.json(data);
+            } else {
+                res.sendStatus(500);
+            }
+        });
+    }
 })
 
 app.delete('/coin/delete/:ID',(req,res)=>{
-    const sql = `DELETE FROM coins WHERE ID=?`;
-    pool.query(sql,[req.params.ID],(err,data)=>{
-        if (err) {
-            res.status(500);
-            res.json(err);
-        } else {
-            res.status(200);
-            res.json(data);
-        }
-    });
+    if (!checkToken(req)) {
+        res.sendStatus(401);
+    }else{
+        const sql = `DELETE FROM coins WHERE ID=?`;
+        pool.query(sql,[req.params.ID],(err,data)=>{
+            if (err) {
+                res.sendStatus(500);
+            } else {
+                res.status(200);
+                res.json(data);
+            }
+        });
+    }
 });
 
 app.put('/coin/edit/:ID',(req,res)=>{
-    const sql = `UPDATE coins
-    SET country = '${req.body.country}', face_value = '${req.body.face_value}' ,
-     image_src = '${req.body.image_src}' , image_src_rever = '${req.body.image_src_rever}' , name = '${req.body.name}'
-    , metal = '${req.body.metal}' , firstPar = '${req.body.firstPar}' , price = ${req.body.price} ,
-     quality = '${req.body.quality}' , secondPar = '${req.body.secondPar}' , typeCoin = '${req.body.typeCoin}' ,
-      weight = ${req.body.weight} , year = ${req.body.year}
-    WHERE ID=?`;
-    pool.query(sql,[req.params.ID],(err,data)=>{
-        if (err) {
-            res.status(500);
-            res.json(err);
-        } else {
-            res.status(200);
-            res.json(data);
-        }
-    });
+    if (!checkToken(req)) {
+        res.sendStatus(401);
+    }else{
+        const sql = `UPDATE coins
+        SET country = '${req.body.country}', face_value = '${req.body.face_value}' ,
+        image_src = '${req.body.image_src}' , image_src_rever = '${req.body.image_src_rever}' , name = '${req.body.name}'
+        , metal = '${req.body.metal}' , firstPar = '${req.body.firstPar}' , price = ${req.body.price} ,
+        quality = '${req.body.quality}' , secondPar = '${req.body.secondPar}' , typeCoin = '${req.body.typeCoin}' ,
+        weight = ${req.body.weight} , year = ${req.body.year}
+        WHERE ID=?`;
+        pool.query(sql,[req.params.ID],(err,data)=>{
+            if (err) {
+                res.status(500);
+                res.json(err);
+            } else {
+                res.status(200);
+                res.json(data);
+            }
+        });
+    }
 });
 
 

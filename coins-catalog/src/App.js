@@ -48,11 +48,11 @@ class App extends React.Component{
         </Route>
 
         <Route exact path='/admin'>
-          <AdminPanelHome/>
+          <AdminPanelHome token={this.state.token}/>
         </Route>
 
         <Route exact path='/coin/add'>
-          <CoinAdd/>
+          <CoinAdd token={this.state.token}/>
         </Route>
 
         <Route exact path='/coin/edit/:ID' component={CoinEdit}/>

@@ -2,9 +2,9 @@ import React from 'react';
 import CoinsListItem from '../CoinsListItem';
 import './AdminPanelHome.css';
 import 'antd/dist/antd.css';
-import { Modal, Button,Input,Pagination,notification } from 'antd';
+import { Modal, Button,Input,Pagination,notification,message } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import {Link} from 'react-router-dom';
+import {Link,Redirect} from 'react-router-dom';
 
 
 class AdminPanelHome extends React.Component{
@@ -13,7 +13,10 @@ class AdminPanelHome extends React.Component{
         current: 1,
         pageSize: 4,
         visible: false,
+        inputValue:'',
         lastPage:'',
+        filteredData:[],
+        redirect: false,
         deleteItemID:null
     }
     componentDidMount(){
@@ -23,7 +26,11 @@ class AdminPanelHome extends React.Component{
     getData=()=>{
         fetch(`http://localhost:3002/coins`)
         .then(res=>res.json())
-        .then(data=>this.setState({data:data,lastPage: +Math.ceil(data.length / this.state.pageSize)}));
+        .then(data=>this.setState({
+            data:data,
+            filteredData:data,
+            lastPage: +Math.ceil(data.length / this.state.pageSize)
+        }));
     }
 
     onChangePagination = page => {
@@ -31,6 +38,10 @@ class AdminPanelHome extends React.Component{
             current: page,
         });
     };
+
+    inputChangeHandler=(e)=>{
+        this.setState({inputValue:e.target.value})
+    }
 
     showModal = (ID) => {
         this.setState({
@@ -47,18 +58,27 @@ class AdminPanelHome extends React.Component{
     };
 
     handleOk = item => {
+        const token = this.props.token;
+        const requestBody = {token:token}
         fetch(`http://localhost:3002/coin/delete/${this.state.deleteItemID}`,{
             method: 'DELETE',
+            body: JSON.stringify(requestBody),
             headers: { 'Content-type': 'application/json' }
         })
+        .then(res=>res.json())
         .then((data) => {
             this.setState({
                     visible: false,
-                    data: this.state.data.filter((el)=>{ return el.ID !== this.state.deleteItemID}),
-                    lastPage: +Math.ceil((this.state.data.length-1) / this.state.pageSize)
+                    filteredData: this.state.filteredData.filter((el)=>{ return el.ID !== this.state.deleteItemID}),
+                    lastPage: +Math.ceil((this.state.filteredData.length-1) / this.state.pageSize)
                 });
             this.openNotification()
-        });
+        })
+        .catch((err)=>{
+            message.error('Please login!');
+            this.setState({visible:false})
+            }
+        );
       };
     
     handleCancel = e => {
@@ -67,18 +87,63 @@ class AdminPanelHome extends React.Component{
         });
     };
 
+    filterDataHandler=()=>{
+        const requestBody = {inputValue:this.state.inputValue}
+        fetch('http://localhost:3002/search', {
+        method:'POST',
+        body: JSON.stringify(requestBody),
+        headers: { 'Content-type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then((data) => {
+            this.setState({
+                filteredData: data,
+                lastPage: +Math.ceil(data.length / this.state.pageSize)
+            })
+        })
+        .catch(()=>{
+            this.setState({
+                filteredData: [],
+                lastPage: 0
+            });
+        })
+    }
+
+    logoutHandler=()=>{
+        const requestBody = {token:this.props.token}
+        fetch('http://localhost:3002/logout', {
+        method:'POST',
+        body: JSON.stringify(requestBody),
+        headers: { 'Content-type': 'application/json' }
+        })
+        .then(data=>{
+            if(data.status===401){
+                console.log(data.statusText)
+            }else if(data.status===200){
+                this.setState({redirect:true});
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+            }
+        })
+        
+    }
+
     render(){
-        const{data,current,pageSize,lastPage} = this.state
+        if (this.state.redirect) {
+            return <Redirect to='/'/>;
+          }
+        const{filteredData,current,pageSize,lastPage} = this.state
         return(
             <div>
                 <h1>Admin panel</h1>
                 <Link className='app-link-to-home' to={'/'}><span>Homepage</span>-List of the coins</Link>
                 <div className='admin-panel-home'>
                     <div className='admin-filter'>
+                        <div className='admin-link-to-logout' onClick={this.logoutHandler}>Logout</div>
                         <p>Input field</p>
                         <div className='search-area'>
-                            <Input className='search-input' placeholder='Search'/>
-                            <Button className='search-button' type="primary">Search</Button>
+                            <Input className='search-input' onChange={this.inputChangeHandler} placeholder='Search'/>
+                            <Button className='search-button' onClick={this.filterDataHandler} type="primary">Search</Button>
                         </div>
                     </div>
                     <div className='admin-link-to-add-area'>
@@ -87,7 +152,7 @@ class AdminPanelHome extends React.Component{
                             Add a new coin
                         </Link>
                     </div>
-                    { data
+                    { filteredData
                         .slice(pageSize * (current - 1), pageSize * current)
                         .map(item=>(
                         <div key={item.ID} className='admin-home-item stretchRight'>

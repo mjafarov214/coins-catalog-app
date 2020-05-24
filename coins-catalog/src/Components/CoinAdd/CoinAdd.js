@@ -2,7 +2,7 @@ import React from 'react';
 import CoinForm from '../CoinForm';
 import{Redirect} from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { notification} from 'antd';
+import { notification,message} from 'antd';
 import { FileDoneOutlined } from '@ant-design/icons';
 
 class CoinAdd extends React.Component{
@@ -19,7 +19,8 @@ class CoinAdd extends React.Component{
     };
 
     onFinish = values => {
-        const requestBody = {...values.coinAdd}
+        const token = this.props.token;
+        const requestBody = {...values.coinAdd,token:token}
         // console.log(values);
         fetch('http://localhost:3002/coin/add', {
         method: 'POST',
@@ -30,7 +31,11 @@ class CoinAdd extends React.Component{
         .then((data) => {
         this.setState({redirect: true})
         this.openNotification()
-        });
+        })
+        .catch((err)=>{
+            message.error('Please login!');
+            }
+        );
     };
 
     render(){

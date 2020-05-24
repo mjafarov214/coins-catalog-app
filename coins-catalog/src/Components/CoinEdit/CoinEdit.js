@@ -1,13 +1,14 @@
 import React from 'react';
 import CoinForm from '../CoinForm';
 import{Redirect} from 'react-router-dom';
-import { notification} from 'antd';
+import { notification,message} from 'antd';
 import { FileSyncOutlined } from '@ant-design/icons';
 
 class CoinEdit extends React.Component{
     state={
         redirect: false,
         editedItemID:null,
+        token: localStorage.getItem('token'),
         fields:[]
     }
     componentDidMount(){
@@ -87,7 +88,7 @@ class CoinEdit extends React.Component{
     };
 
     onFinish = values => {
-        const requestBody = {...values.coinAdd}
+        const requestBody = {...values.coinAdd,token:this.state.token}
         // console.log(values);
         fetch(`http://localhost:3002/coin/edit/${this.state.editedItemID}`, {
         method: 'PUT',
@@ -98,10 +99,15 @@ class CoinEdit extends React.Component{
         .then((data) => {
         this.setState({redirect: true})
         this.openNotification()
-        });
+        })
+        .catch((err)=>{
+            message.error('Please login!');
+            }
+        );
     };
 
     render(){
+        console.log(this.props)
         // console.log(this.state.editedItemID);
         if (this.state.redirect) {
             return <Redirect to='/admin'/>;

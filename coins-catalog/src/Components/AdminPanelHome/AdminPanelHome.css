@@ -75,6 +75,23 @@
     margin-right: 15px;
 }
 
+.admin-link-to-logout{
+    position: absolute;
+    right: 52px;
+    top: 52px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 22px;
+    text-decoration-line: underline;
+    color: #000000;
+}
+
+.admin-link-to-logout:hover{
+    color:steelblue;
+    cursor:pointer
+}
+
 
 .stretchRight{
     animation-name: stretchRight;

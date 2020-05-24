@@ -1,7 +1,7 @@
 import React from 'react';
 import './Login.css';
 import 'antd/dist/antd.css';
-import { Form, Input, Button, notification} from 'antd';
+import { Form, Input, Button, notification, message} from 'antd';
 import{Redirect} from 'react-router-dom';
 import { SmileOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -54,7 +54,11 @@ class Login extends React.Component{
         this.openNotification(data.login);
         this.props.onLogin(data.token, data.login);
         this.setState({redirect: true})
-      });
+      })
+      .catch((err)=>{
+          message.error('Unauthorized user');
+          }
+      );
   };
   onFinishFailed = errorInfo => {
           console.log('Failed:', errorInfo);
