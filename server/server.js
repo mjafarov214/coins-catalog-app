@@ -95,7 +95,7 @@ app.post('/logout', (req, res) => {
 
 app.get('/coins', (req, res) => {
     pool.query(`SELECT ID, country , face_value , image_src , image_src_rever , name
-    , metal , firstPar , price , quality , secondPar , typeCoin , weight , year FROM coins`, (err, data) => {
+    , metal , firstPar , price , quality , secondPar , typeCoin , weight , year, views FROM coins`, (err, data) => {
         if (err) {
             res.status(500);
         } else if(!data.length){
@@ -109,7 +109,7 @@ app.get('/coins', (req, res) => {
 
 app.get('/coins/:typeCoin', (req, res) => {
     pool.query(`SELECT ID, country , face_value , image_src , image_src_rever , name
-    , metal , firstPar , price , quality , secondPar , typeCoin , weight FROM coins WHERE typeCoin = '${req.params.typeCoin}'`, (err, data) => {
+    , metal , firstPar , price , quality , secondPar , typeCoin , weight,views FROM coins WHERE typeCoin = '${req.params.typeCoin}'`, (err, data) => {
         if (err) {
             res.status(500);
         } else if(!data.length){
@@ -123,7 +123,7 @@ app.get('/coins/:typeCoin', (req, res) => {
 
 app.post('/search/:typeCoin', (req, res) => {
     pool.query(`SELECT ID, country , face_value , image_src , image_src_rever , name
-    , metal , firstPar , price , quality , secondPar , typeCoin , weight FROM coins 
+    , metal , firstPar , price , quality , secondPar , typeCoin , weight,views FROM coins 
         WHERE (name LIKE '%${req.body.inputValue}%' OR firstPar LIKE '%${req.body.inputValue}%' 
         OR secondPar LIKE '%${req.body.inputValue}%') AND typeCoin='${req.params.typeCoin}' ORDER BY name, firstPar,secondPar`
         , (err, data) => {
@@ -140,7 +140,7 @@ app.post('/search/:typeCoin', (req, res) => {
 
 app.post('/search/:typeCoin', (req, res) => {
     pool.query(`SELECT ID, country , face_value , image_src , image_src_rever , name
-    , metal , firstPar , price , quality , secondPar , typeCoin , weight,year FROM coins 
+    , metal , firstPar , price , quality , secondPar , typeCoin , weight,year,views FROM coins 
         WHERE (name LIKE '%${req.body.inputValue}%' OR firstPar LIKE '%${req.body.inputValue}%' 
         OR secondPar LIKE '%${req.body.inputValue}%') AND typeCoin='${req.params.typeCoin}' ORDER BY name, firstPar,secondPar`
         , (err, data) => {
@@ -157,7 +157,7 @@ app.post('/search/:typeCoin', (req, res) => {
 
 app.post('/search', (req, res) => {
     pool.query(`SELECT ID, country , face_value , image_src , image_src_rever , name
-    , metal , firstPar , price , quality , secondPar , typeCoin , weight,year  FROM coins 
+    , metal , firstPar , price , quality , secondPar , typeCoin , weight,year,views  FROM coins 
         WHERE (name LIKE '%${req.body.inputValue}%' OR firstPar LIKE '%${req.body.inputValue}%' 
         OR secondPar LIKE '%${req.body.inputValue}%') ORDER BY name, firstPar,secondPar`
         , (err, data) => {
@@ -173,17 +173,19 @@ app.post('/search', (req, res) => {
 });
 
 app.get('/coin/:ID', (req, res) => {
-    pool.query(`SELECT ID, country , face_value , image_src , image_src_rever , name
-    , metal , firstPar , price , quality , secondPar , typeCoin , weight , year
-    FROM coins WHERE ID = '${req.params.ID}'`, (err, data) => {
-        if (err) {
-            res.status(500);
-        } else if(!data.length){
-            res.status(404);
-        }else {
-            res.json(data);
-            res.status(200);
-        }
+    const sql = `SELECT ID, country , face_value , image_src , image_src_rever , name
+    , metal , firstPar , price , quality , secondPar , typeCoin , weight , year, views
+    FROM coins WHERE ID = ?`;
+    const sqlUpdate = `UPDATE coins SET views = views + 1 WHERE ID = ?`;
+    pool.query(sql, [req.params.ID], (err, data) => {
+        pool.query(sqlUpdate, [req.params.ID], (err) => {
+            if(!err){
+                res.json(data);
+                res.status(200);
+            }else{
+                res.sendStatus(500);
+            }
+        })
     });
 });
 
@@ -193,11 +195,11 @@ app.post('/coin/add',(req,res)=>{
       }else{
         const sql = `INSERT INTO coins
         (country , face_value , image_src , image_src_rever , name
-            , metal , firstPar , price , quality , secondPar , typeCoin , weight , year)VALUES
+            , metal , firstPar , price , quality , secondPar , typeCoin , weight , year,views)VALUES
         ('${req.body.country}', '${req.body.face_value}', '${req.body.image_src}', '${req.body.image_src_rever}'
         , '${req.body.name}', '${req.body.metal}', '${req.body.firstPar}', ${req.body.price}
         , '${req.body.quality}', '${req.body.secondPar}', '${req.body.typeCoin}', ${req.body.weight}
-        , ${req.body.year})`
+        , ${req.body.year},0)`
         pool.query(sql, (err, data) => {
             if (!err) {
                 res.status(200);
